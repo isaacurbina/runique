@@ -1,6 +1,0 @@
-int string analytics 0x0
-int string avg_distance_per_run 0x0
-int string avg_pace_per_run 0x0
-int string fastest_ever_run 0x0
-int string total_distance_run 0x0
-int string total_time_run 0x0

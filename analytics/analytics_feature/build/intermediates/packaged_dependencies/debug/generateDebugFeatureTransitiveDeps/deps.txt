@@ -1,4 +1,0 @@
-:analytics:analytics_feature::debug;Capability: group='Runique.analytics', name='analytics_feature'
-:analytics:data::debug;Capability: group='Runique.analytics', name='data'
-:analytics:domain;Capability: group='Runique.analytics', name='domain'
-:analytics:presentation::debug;Capability: group='Runique.analytics', name='presentation'
