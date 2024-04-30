@@ -1,2 +1,0 @@
-com.plcoding.core.notification
-string active_run
