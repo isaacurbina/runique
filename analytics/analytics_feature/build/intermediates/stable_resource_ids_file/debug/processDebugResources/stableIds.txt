@@ -1,0 +1,6 @@
+com.plcoding.runique:string/total_time_run = 0x7e010005
+com.plcoding.runique:string/fastest_ever_run = 0x7e010003
+com.plcoding.runique:string/avg_distance_per_run = 0x7e010001
+com.plcoding.runique:string/total_distance_run = 0x7e010004
+com.plcoding.runique:string/avg_pace_per_run = 0x7e010002
+com.plcoding.runique:string/analytics = 0x7e010000

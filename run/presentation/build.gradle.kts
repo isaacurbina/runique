@@ -1,10 +1,10 @@
 plugins {
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.iucoding.run.presentation"
+    namespace = "com.plcoding.run.presentation"
     compileSdk = 34
 
     defaultConfig {
@@ -33,11 +33,8 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.coil.compose)
+    implementation(libs.google.maps.android.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.timber)
 }

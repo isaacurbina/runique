@@ -1,0 +1,7 @@
+com.plcoding.analytics.analytics_feature
+string analytics
+string avg_distance_per_run
+string avg_pace_per_run
+string fastest_ever_run
+string total_distance_run
+string total_time_run
