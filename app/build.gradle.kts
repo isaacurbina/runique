@@ -1,6 +1,6 @@
 plugins {
+    alias(libs.plugins.runique.android.application.compose)
     alias(libs.plugins.mapsplatform.secrets.plugin)
-    alias(libs.plugins.runique.android.application)
 }
 
 android {
@@ -12,12 +12,7 @@ android {
             useSupportLibrary = true
         }
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.9"
-    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
