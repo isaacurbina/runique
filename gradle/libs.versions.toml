@@ -18,7 +18,7 @@ ktorClientLogging = "2.3.8"
 ktorServerCallLogging = "2.3.7"
 koin = "3.5.3"
 lifecycleRuntimeKtx = "2.7.0"
-composeBom = "2024.04.01"
+composeBom = "2024.02.02"
 materialIconsExtended = "1.6.3"
 navigationCompose = "2.7.7"
 securityCryptoKtx = "1.1.0-alpha06"
@@ -121,5 +121,8 @@ androidDynamicFeature = { id = "com.android.dynamic-feature", version.ref = "agp
 mapsplatform-secrets-plugin = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsPlugin" }
 
 runique-android-application = { id = "runique.android.application", version = "unspecified" }
+<<<<<<< HEAD
 runique-android-application-compose = { id = "runique.android.application.compose", version = "unspecified" }
 runique-android-library = { id = "runique.android.library", version = "unspecified" }
+=======
+>>>>>>> parent of 3e6bc40 (4.7.3 Adding AndroidApplicationComposeConventionPlugin (#6))
