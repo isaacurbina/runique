@@ -1,4 +1,4 @@
-package com.presentation.ui
+package com.plcoding.auth.presentation.register
 
 import android.content.Context
 import androidx.annotation.StringRes
@@ -24,7 +24,7 @@ sealed interface UiText {
         }
     }
 
-    fun UiText.asString(context: Context): String {
+    fun asString(context: Context): String {
         return when (this) {
             is DynamicString -> value
             is StringResource -> context.getString(id, *args)
