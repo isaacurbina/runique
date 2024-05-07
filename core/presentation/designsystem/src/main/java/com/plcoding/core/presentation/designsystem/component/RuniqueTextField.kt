@@ -130,6 +130,7 @@ fun RuniqueTextField(
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                        Spacer(modifier = Modifier.width(16.dp))
                     }
                     Box(
                         modifier = Modifier.weight(1f)
