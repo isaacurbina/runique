@@ -1,6 +1,5 @@
 package com.plcoding.runique
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -8,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.plcoding.auth.presentation.intro.IntroScreenRoot
+import com.plcoding.auth.presentation.intro.LoginScreenRoot
 import com.plcoding.auth.presentation.register.RegisterScreenRoot
 
 @Composable
@@ -48,7 +48,7 @@ private fun NavGraphBuilder.authGraph(
                             inclusive = true
                             saveState = true
                         }
-                        restoreState
+                        restoreState = true
                     }
                 },
                 onSuccessfulRegistration = {
@@ -57,7 +57,24 @@ private fun NavGraphBuilder.authGraph(
         }
 
         composable("login") {
-            Text(text = "Login")
+            LoginScreenRoot(
+                onLoginSuccess = {
+                    navController.navigate("run") {
+                        popUpTo("auth") {
+                            inclusive = true
+                        }
+                    }
+                },
+                onSignUpClick = {
+                    navController.navigate("register") {
+                        popUpTo(route = "login") {
+                            inclusive = true
+                            saveState = true
+                        }
+                        restoreState = true
+                    }
+                }
+            )
         }
     }
 }
