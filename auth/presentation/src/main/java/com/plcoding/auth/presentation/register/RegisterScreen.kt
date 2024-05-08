@@ -1,7 +1,4 @@
-@file:OptIn(
-    ExperimentalFoundationApi::class, ExperimentalFoundationApi::class,
-    ExperimentalFoundationApi::class
-)
+@file:OptIn(ExperimentalFoundationApi::class)
 
 package com.plcoding.auth.presentation.register
 
