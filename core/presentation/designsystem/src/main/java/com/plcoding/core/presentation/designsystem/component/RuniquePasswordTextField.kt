@@ -52,7 +52,7 @@ fun RuniquePasswordTextField(
     onTogglePasswordVisibility: () -> Unit,
     hint: String,
     title: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var isFocused by remember {
         mutableStateOf(false)
@@ -61,8 +61,9 @@ fun RuniquePasswordTextField(
         modifier = modifier
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             if (title != null) {
                 Text(
@@ -89,16 +90,20 @@ fun RuniquePasswordTextField(
                         MaterialTheme.colorScheme.primary.copy(
                             alpha = 0.05f
                         )
-                    } else MaterialTheme.colorScheme.surface
+                    } else {
+                        MaterialTheme.colorScheme.surface
+                    }
                 )
                 .border(
                     width = 1.dp,
                     color = if (isFocused) {
                         MaterialTheme.colorScheme.primary
-                    } else Color.Transparent,
+                    } else {
+                        Color.Transparent
+                    },
                     shape = RoundedCornerShape(16.dp)
                 )
-                .padding(12.dp)
+                .padding(horizontal = 12.dp)
                 .onFocusChanged {
                     isFocused = it.isFocused
                 },
@@ -115,7 +120,8 @@ fun RuniquePasswordTextField(
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Box(
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
                     ) {
                         if (state.text.isEmpty() && !isFocused) {
                             Text(
@@ -128,18 +134,17 @@ fun RuniquePasswordTextField(
                         }
                         innerBox()
                     }
-                    IconButton(
-                        onClick = onTogglePasswordVisibility
-                    ) {
+                    IconButton(onClick = onTogglePasswordVisibility) {
                         Icon(
                             imageVector = if (!isPasswordVisible) {
                                 EyeClosedIcon
                             } else EyeOpenedIcon,
                             contentDescription = if (isPasswordVisible) {
                                 stringResource(id = R.string.show_password)
-                            } else stringResource(id = R.string.hide_password),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(end = 8.dp)
+                            } else {
+                                stringResource(id = R.string.hide_password)
+                            },
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -150,15 +155,16 @@ fun RuniquePasswordTextField(
 
 @Preview
 @Composable
-private fun RuniquePasswordTextFieldPreview() {
+private fun RuniqueTextFieldPreview() {
     RuniqueTheme {
         RuniquePasswordTextField(
             state = rememberTextFieldState(),
-            isPasswordVisible = false,
-            onTogglePasswordVisibility = {},
             hint = "example@test.com",
             title = "Email",
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth(),
+            isPasswordVisible = false,
+            onTogglePasswordVisibility = {}
         )
     }
 }
