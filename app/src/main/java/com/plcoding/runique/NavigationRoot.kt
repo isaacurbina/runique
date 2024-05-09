@@ -13,11 +13,15 @@ import com.plcoding.auth.presentation.register.RegisterScreenRoot
 
 @Composable
 fun NavigationRoot(
-    navController: NavHostController
+    navController: NavHostController,
+    isLoggedIn: Boolean
 ) {
+    val startDestination = if (isLoggedIn) {
+        RunGraphDestination.RUN.name
+    } else AuthGraphDestination.AUTH.name
     NavHost(
         navController = navController,
-        startDestination = "auth"
+        startDestination = startDestination
     ) {
         authGraph(navController)
         runGraph(navController)
@@ -26,16 +30,16 @@ fun NavigationRoot(
 
 private fun NavGraphBuilder.authGraph(navController: NavHostController) {
     navigation(
-        startDestination = "intro",
-        route = "auth"
+        startDestination = AuthGraphDestination.INTRO.name,
+        route = AuthGraphDestination.AUTH.name
     ) {
-        composable(route = "intro") {
+        composable(route = AuthGraphDestination.INTRO.name) {
             IntroScreenRoot(
                 onSignedUpClick = {
-                    navController.navigate("register")
+                    navController.navigate(AuthGraphDestination.REGISTER.name)
                 },
                 onSignInClick = {
-                    navController.navigate("login")
+                    navController.navigate(AuthGraphDestination.LOGIN.name)
                 }
             )
         }
@@ -43,8 +47,8 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
         composable(route = "register") {
             RegisterScreenRoot(
                 onSignInClick = {
-                    navController.navigate("login") {
-                        popUpTo(route = "register") {
+                    navController.navigate(AuthGraphDestination.LOGIN.name) {
+                        popUpTo(route = AuthGraphDestination.REGISTER.name) {
                             inclusive = true
                             saveState = true
                         }
@@ -52,22 +56,22 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
                     }
                 },
                 onSuccessfulRegistration = {
-                    navController.navigate("login")
+                    navController.navigate(AuthGraphDestination.LOGIN.name)
                 })
         }
 
         composable(route = "login") {
             LoginScreenRoot(
                 onLoginSuccess = {
-                    navController.navigate("run") {
-                        popUpTo("auth") {
+                    navController.navigate(RunGraphDestination.RUN.name) {
+                        popUpTo(AuthGraphDestination.AUTH.name) {
                             inclusive = true
                         }
                     }
                 },
                 onSignUpClick = {
-                    navController.navigate("register") {
-                        popUpTo(route = "login") {
+                    navController.navigate(AuthGraphDestination.REGISTER.name) {
+                        popUpTo(route = AuthGraphDestination.LOGIN.name) {
                             inclusive = true
                             saveState = true
                         }
@@ -81,10 +85,10 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
 
 private fun NavGraphBuilder.runGraph(navController: NavHostController) {
     navigation(
-        startDestination = "run_overview",
-        route = "run"
+        startDestination = RunGraphDestination.RUN_OVERVIEW.name,
+        route = RunGraphDestination.RUN.name
     ) {
-        composable(route = "run_overview") {
+        composable(route = RunGraphDestination.RUN_OVERVIEW.name) {
             Text(text = "Run overview!")
         }
     }
