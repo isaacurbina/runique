@@ -1,4 +1,4 @@
-package com.plcoding.auth.presentation.register
+package com.plcoding.auth.presentation
 
 import com.plcoding.core.domain.util.DataError
 import com.plcoding.core.presentation.ui.R

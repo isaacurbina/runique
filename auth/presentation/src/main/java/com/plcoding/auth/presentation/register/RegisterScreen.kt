@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.plcoding.auth.domain.PasswordValidationState
 import com.plcoding.auth.domain.UserDataValidator
+import com.plcoding.auth.presentation.ObserveAsEvents
 import com.plcoding.auth.presentation.R
 import com.plcoding.core.presentation.designsystem.CheckIcon
 import com.plcoding.core.presentation.designsystem.CrossIcon

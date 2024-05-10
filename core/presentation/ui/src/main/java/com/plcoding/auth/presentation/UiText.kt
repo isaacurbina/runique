@@ -1,4 +1,4 @@
-package com.plcoding.auth.presentation.register
+package com.plcoding.auth.presentation
 
 import android.content.Context
 import androidx.annotation.StringRes

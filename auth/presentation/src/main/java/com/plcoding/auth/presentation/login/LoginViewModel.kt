@@ -13,8 +13,8 @@ import androidx.lifecycle.viewModelScope
 import com.plcoding.auth.domain.AuthRepository
 import com.plcoding.auth.domain.UserDataValidator
 import com.plcoding.auth.presentation.R
-import com.plcoding.auth.presentation.register.UiText
-import com.plcoding.auth.presentation.register.asUiText
+import com.plcoding.auth.presentation.UiText
+import com.plcoding.auth.presentation.asUiText
 import com.plcoding.core.domain.util.DataError
 import com.plcoding.core.domain.util.Result
 import kotlinx.coroutines.channels.Channel
