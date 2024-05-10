@@ -1,7 +1,6 @@
-@file:Suppress("OPT_IN_USAGE_FUTURE_ERROR")
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.plcoding.auth.presentation.intro
+package com.plcoding.auth.presentation.login
 
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -32,10 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.plcoding.auth.presentation.R
-import com.plcoding.auth.presentation.login.LoginAction
-import com.plcoding.auth.presentation.login.LoginEvent
-import com.plcoding.auth.presentation.login.LoginState
-import com.plcoding.auth.presentation.login.LoginViewModel
 import com.plcoding.auth.presentation.register.ObserveAsEvents
 import com.plcoding.core.presentation.designsystem.EmailIcon
 import com.plcoding.core.presentation.designsystem.Poppins
@@ -50,7 +45,7 @@ import org.koin.androidx.compose.koinViewModel
 fun LoginScreenRoot(
     onLoginSuccess: () -> Unit,
     onSignUpClick: () -> Unit,
-    viewModel: LoginViewModel = koinViewModel()
+    viewModel: LoginViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -65,13 +60,14 @@ fun LoginScreenRoot(
                 ).show()
             }
 
-            is LoginEvent.LoginSuccess -> {
+            LoginEvent.LoginSuccess -> {
                 keyboardController?.hide()
                 Toast.makeText(
                     context,
                     R.string.youre_logged_in,
                     Toast.LENGTH_LONG
                 ).show()
+
                 onLoginSuccess()
             }
         }
@@ -100,7 +96,7 @@ private fun LoginScreen(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
                 .padding(vertical = 32.dp)
-                .padding(top = 16.dp)
+                .padding(top = 16.dp),
         ) {
             Text(
                 text = stringResource(id = R.string.hi_there),
@@ -139,10 +135,12 @@ private fun LoginScreen(
                 isLoading = state.isLoggingIn,
                 enabled = state.canLogin && !state.isLoggingIn,
                 onClick = {
-                    onAction(LoginAction.onLoginClick)
-                }
+                    onAction(LoginAction.OnLoginClick)
+                },
             )
-
+            Spacer(
+                modifier = Modifier.height(16.dp)
+            )
             val annotatedString = buildAnnotatedString {
                 withStyle(
                     style = SpanStyle(
@@ -168,9 +166,9 @@ private fun LoginScreen(
             }
             Box(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .weight(1f),
-                contentAlignment = Alignment.BottomCenter
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                contentAlignment = Alignment.Center
             ) {
                 ClickableText(
                     text = annotatedString,
@@ -194,9 +192,8 @@ private fun LoginScreen(
 private fun LoginScreenPreview() {
     RuniqueTheme {
         LoginScreen(
-            state = LoginState()
-        ) {
-
-        }
+            state = LoginState(),
+            onAction = {}
+        )
     }
 }

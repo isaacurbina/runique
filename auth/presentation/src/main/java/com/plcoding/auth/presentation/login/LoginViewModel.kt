@@ -52,7 +52,7 @@ class LoginViewModel(
                 )
             }
 
-            LoginAction.onLoginClick -> login()
+            LoginAction.OnLoginClick -> login()
         }
     }
 
