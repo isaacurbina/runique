@@ -1,4 +1,4 @@
-package com.plcoding.auth.presentation.register
+package com.plcoding.auth.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

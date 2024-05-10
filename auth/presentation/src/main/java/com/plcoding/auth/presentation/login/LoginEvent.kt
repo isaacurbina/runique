@@ -1,6 +1,6 @@
 package com.plcoding.auth.presentation.login
 
-import com.plcoding.auth.presentation.register.UiText
+import com.plcoding.auth.presentation.UiText
 
 sealed interface LoginEvent {
     data class Error(val error: UiText) : LoginEvent

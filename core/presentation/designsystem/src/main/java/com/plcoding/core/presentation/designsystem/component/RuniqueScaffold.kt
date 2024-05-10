@@ -1,6 +1,7 @@
 package com.plcoding.core.presentation.designsystem.component
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,6 +17,7 @@ fun RuniqueScaffold(
     Scaffold(
         modifier = modifier,
         topBar = topAppBar,
+        floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = floatingActionButton
     ) { padding ->
         if (withGradient) {
@@ -23,6 +25,5 @@ fun RuniqueScaffold(
                 content(padding)
             }
         } else content(padding)
-
     }
 }

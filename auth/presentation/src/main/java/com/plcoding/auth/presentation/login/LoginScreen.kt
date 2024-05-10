@@ -30,8 +30,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.plcoding.auth.presentation.ObserveAsEvents
 import com.plcoding.auth.presentation.R
-import com.plcoding.auth.presentation.register.ObserveAsEvents
 import com.plcoding.core.presentation.designsystem.EmailIcon
 import com.plcoding.core.presentation.designsystem.Poppins
 import com.plcoding.core.presentation.designsystem.RuniqueTheme
