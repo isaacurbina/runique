@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.plcoding.auth.presentation.intro.IntroScreenRoot
-import com.plcoding.auth.presentation.intro.LoginScreenRoot
+import com.plcoding.auth.presentation.login.LoginScreenRoot
 import com.plcoding.auth.presentation.register.RegisterScreenRoot
 import com.plcoding.run.presentation.runoverview.RunOverviewScreenRoot
 
@@ -44,9 +44,10 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
             )
         }
 
-        composable(route = "register") {
+        composable(route = AuthGraphDestination.REGISTER.name) {
             RegisterScreenRoot(
                 onSignInClick = {
+                    // TODO(Isaac) - this navigation is not working, this code is not executing
                     navController.navigate(AuthGraphDestination.LOGIN.name) {
                         popUpTo(route = AuthGraphDestination.REGISTER.name) {
                             inclusive = true
@@ -57,10 +58,11 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
                 },
                 onSuccessfulRegistration = {
                     navController.navigate(AuthGraphDestination.LOGIN.name)
-                })
+                }
+            )
         }
 
-        composable(route = "login") {
+        composable(route = AuthGraphDestination.LOGIN.name) {
             LoginScreenRoot(
                 onLoginSuccess = {
                     navController.navigate(RunGraphDestination.RUN.name) {
