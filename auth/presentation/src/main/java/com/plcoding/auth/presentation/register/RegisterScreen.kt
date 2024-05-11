@@ -82,8 +82,7 @@ fun RegisterScreenRoot(
         state = viewModel.state,
         onAction = { action ->
             when (action) {
-                // TODO(Isaac) - onSignInClick() is not actually executing
-                RegisterAction.OnRegisterClick -> onSignInClick()
+                RegisterAction.OnLoginClick -> onSignInClick()
                 else -> Unit
             }
             viewModel.onAction(action)

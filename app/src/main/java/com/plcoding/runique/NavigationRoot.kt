@@ -48,7 +48,6 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
         composable(route = AuthGraphDestination.REGISTER.name) {
             RegisterScreenRoot(
                 onSignInClick = {
-                    // TODO(Isaac) - this navigation is not working, this code is not executing
                     navController.navigate(AuthGraphDestination.LOGIN.name) {
                         popUpTo(route = AuthGraphDestination.REGISTER.name) {
                             inclusive = true
