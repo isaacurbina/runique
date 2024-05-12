@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flow
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-object Timer {
+object RuniqueTimer {
 
     fun timeAndEmit(): Flow<Duration> {
         return flow {
