@@ -31,6 +31,7 @@ import com.plcoding.core.presentation.designsystem.component.RuniqueScaffold
 import com.plcoding.core.presentation.designsystem.component.RuniqueToolbar
 import com.plcoding.run.presentation.R
 import com.plcoding.run.presentation.activerun.component.RunDataCard
+import com.plcoding.run.presentation.activerun.map.TrackerMap
 import com.plcoding.run.presentation.util.hasLocationPermission
 import com.plcoding.run.presentation.util.hasNotificationPermission
 import com.plcoding.run.presentation.util.requestRuniquePermissions
@@ -137,6 +138,13 @@ fun ActiveRunScreen(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
         ) {
+            TrackerMap(
+                isRunFinished = state.isRunFinished,
+                currentLocation = state.currentLocation,
+                locations = state.runData.locations,
+                onSnapshot = {},
+                modifier = Modifier.fillMaxSize()
+            )
             RunDataCard(
                 elapsedTime = state.elapsedTime,
                 runData = state.runData,
