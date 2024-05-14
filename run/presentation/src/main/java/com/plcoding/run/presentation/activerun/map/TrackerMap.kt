@@ -69,7 +69,7 @@ fun TrackerMap(
         if (currentLocation != null && !isRunFinished) {
             val latLng = LatLng(currentLocation.lat, currentLocation.long)
             cameraPositionState.animate(
-                CameraUpdateFactory.newLatLngZoom(latLng, 18f)
+                CameraUpdateFactory.newLatLngZoom(latLng, 20f)
             )
         }
     }
@@ -81,7 +81,7 @@ fun TrackerMap(
         ),
         uiSettings = MapUiSettings(
             zoomControlsEnabled = false,
-            zoomGesturesEnabled = false,
+            zoomGesturesEnabled = true,
             rotationGesturesEnabled = false,
             scrollGesturesEnabled = false,
             scrollGesturesEnabledDuringRotateOrZoom = false
