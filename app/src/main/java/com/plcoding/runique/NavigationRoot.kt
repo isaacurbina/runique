@@ -1,15 +1,18 @@
 package com.plcoding.runique
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.plcoding.auth.presentation.intro.IntroScreenRoot
 import com.plcoding.auth.presentation.login.LoginScreenRoot
 import com.plcoding.auth.presentation.register.RegisterScreenRoot
 import com.plcoding.run.presentation.activerun.ActiveRunScreenRoot
+import com.plcoding.run.presentation.activerun.service.ActiveRunService
 import com.plcoding.run.presentation.runoverview.RunOverviewScreenRoot
 
 @Composable
@@ -97,8 +100,32 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
                 }
             )
         }
-        composable(route = RunGraphDestination.ACTIVE_RUN.name) {
+        composable(
+            route = RunGraphDestination.ACTIVE_RUN.name,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "runique://active_run"
+                }
+            )
+        ) {
+            val context = LocalContext.current
             ActiveRunScreenRoot(
+                onServiceToggle = { state ->
+                    when (state) {
+                        ActiveRunService.State.STARTED ->
+                            context.startService(
+                                ActiveRunService.createStartIntent(
+                                    context = context,
+                                    activityClass = MainActivity::class.java
+                                )
+                            )
+
+                        ActiveRunService.State.STOPPED ->
+                            context.startService(
+                                ActiveRunService.createStopIntent(context = context)
+                            )
+                    }
+                },
                 onBackClick = {
                     navController.popBackStack()
                 }
