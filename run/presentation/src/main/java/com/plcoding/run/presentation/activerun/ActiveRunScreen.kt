@@ -33,6 +33,7 @@ import com.plcoding.core.presentation.designsystem.component.RuniqueToolbar
 import com.plcoding.run.presentation.R
 import com.plcoding.run.presentation.activerun.component.RunDataCard
 import com.plcoding.run.presentation.activerun.map.TrackerMap
+import com.plcoding.run.presentation.activerun.service.ActiveRunService
 import com.plcoding.run.presentation.util.hasLocationPermission
 import com.plcoding.run.presentation.util.hasNotificationPermission
 import com.plcoding.run.presentation.util.requestRuniquePermissions
@@ -43,10 +44,12 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ActiveRunScreenRoot(
     viewModel: ActiveRunViewModel = koinViewModel(),
+    onServiceToggle: (ActiveRunService.State) -> Unit,
     onBackClick: () -> Unit
 ) {
     ActiveRunScreen(
         state = viewModel.state,
+        onServiceToggle = onServiceToggle,
         onAction = {
             viewModel.onAction(it)
             when (it) {
@@ -60,6 +63,7 @@ fun ActiveRunScreenRoot(
 @Composable
 fun ActiveRunScreen(
     state: ActiveRunState,
+    onServiceToggle: (ActiveRunService.State) -> Unit,
     onAction: (ActiveRunAction) -> Unit
 ) {
     val context = LocalContext.current
@@ -112,6 +116,18 @@ fun ActiveRunScreen(
 
         if (!showLocationRationale && !showNotificationRationale) {
             permissionLauncher.requestRuniquePermissions(context)
+        }
+    }
+
+    LaunchedEffect(key1 = state.isRunFinished) {
+        if (state.isRunFinished) {
+            onServiceToggle(ActiveRunService.State.STOPPED)
+        }
+    }
+
+    LaunchedEffect(key1 = state.shouldTrack) {
+        if (context.hasLocationPermission() && state.shouldTrack && !ActiveRunService.isServiceActive) {
+            onServiceToggle(ActiveRunService.State.STARTED)
         }
     }
 
@@ -228,6 +244,7 @@ private fun ActiveRunScreenPreview() {
     RuniqueTheme {
         ActiveRunScreen(
             state = ActiveRunState(),
+            onServiceToggle = {},
             onAction = {}
         )
     }
