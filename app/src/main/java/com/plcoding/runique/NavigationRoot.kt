@@ -98,7 +98,11 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
             )
         }
         composable(route = RunGraphDestination.ACTIVE_RUN.name) {
-            ActiveRunScreenRoot()
+            ActiveRunScreenRoot(
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
