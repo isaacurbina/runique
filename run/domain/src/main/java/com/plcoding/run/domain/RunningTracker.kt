@@ -26,7 +26,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class RunningTracker(
     private val locationObserver: LocationObserver,
-    private val applicationScope: CoroutineScope
+    applicationScope: CoroutineScope
 ) {
     private val _runData = MutableStateFlow(RunData())
     val runData = _runData.asStateFlow()
@@ -52,6 +52,18 @@ class RunningTracker(
 
     init {
         isTracking
+            .onEach { isTracking ->
+                if (!isTracking) {
+                    val newList = buildList {
+                        addAll(runData.value.locations)
+                        add(emptyList())
+                        Unit
+                    }.toList()
+                    _runData.update {
+                        it.copy(locations = newList)
+                    }
+                }
+            }
             .flatMapLatest {
                 if (it) {
                     RuniqueTimer.timeAndEmit()
