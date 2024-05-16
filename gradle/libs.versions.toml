@@ -44,7 +44,7 @@ composeVersion = "1.6.6"
 # Project versions
 projectApplicationId = "com.plcoding.runique"
 projectVersionName = "1.0"
-projectMinSdkVersion = "25"
+projectMinSdkVersion = "26"
 projectTargetSdkVersion = "34"
 projectCompileSdkVersion = "34"
 projectVersionCode = "1"
