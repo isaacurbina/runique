@@ -287,7 +287,7 @@ private fun DataGridCell(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = runData.name,
+            text = runData.value,
             color = MaterialTheme.colorScheme.onSurface
         )
     }

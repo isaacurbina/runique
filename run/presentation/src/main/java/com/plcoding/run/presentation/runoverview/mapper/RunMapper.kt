@@ -12,20 +12,12 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 fun Run.toRunUi(): RunUi {
-    val dateTimeInLocalTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    val dateTimeInLocalTime =
         dateTimeUtc.withZoneSameInstant(ZoneId.systemDefault())
-    } else {
-        // TODO(Research how to do this in Android 0<
-        dateTimeUtc
-    }
-    val formattedDateTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    val formattedDateTime =
         DateTimeFormatter
             .ofPattern("MMM dd, yyyy - hh:mma")
             .format(dateTimeInLocalTime)
-    } else {
-        // TODO(Research how to do this in Android 0<
-        dateTimeInLocalTime.toString()
-    }
     val distanceKm = distanceMeters / 1000.0
 
     return RunUi(
