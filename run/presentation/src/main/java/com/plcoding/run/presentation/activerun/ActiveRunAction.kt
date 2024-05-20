@@ -17,4 +17,8 @@ sealed interface ActiveRunAction {
         val acceptedNotificationPermission: Boolean,
         val showNotificationRationale: Boolean
     ) : ActiveRunAction
+
+    class OnRunProcessed(
+        val mapPictureBytes: ByteArray
+    ) : ActiveRunAction
 }
