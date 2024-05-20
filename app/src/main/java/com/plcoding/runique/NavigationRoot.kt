@@ -127,7 +127,10 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
                     }
                 },
                 onBackClick = {
-                    navController.popBackStack()
+                    navController.navigateUp()
+                },
+                onFinish = {
+                    navController.navigateUp()
                 }
             )
         }

@@ -5,6 +5,7 @@ package com.plcoding.run.presentation.activerun
 import android.Manifest
 import android.graphics.Bitmap
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.plcoding.auth.presentation.ObserveAsEvents
 import com.plcoding.core.presentation.designsystem.RuniqueTheme
 import com.plcoding.core.presentation.designsystem.StartIcon
 import com.plcoding.core.presentation.designsystem.StopIcon
@@ -47,17 +49,35 @@ import java.io.ByteArrayOutputStream
 fun ActiveRunScreenRoot(
     viewModel: ActiveRunViewModel = koinViewModel(),
     onServiceToggle: (ActiveRunService.State) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onFinish: () -> Unit
 ) {
+    val context = LocalContext.current
+    ObserveAsEvents(flow = viewModel.events) { event ->
+        when (event) {
+            is ActiveRunEvent.Error -> Toast.makeText(
+                context,
+                event.error.asString(context),
+                Toast.LENGTH_LONG
+            ).show()
+
+            ActiveRunEvent.RunSaved -> onFinish()
+        }
+    }
     ActiveRunScreen(
         state = viewModel.state,
         onServiceToggle = onServiceToggle,
         onAction = {
-            viewModel.onAction(it)
             when (it) {
-                ActiveRunAction.OnBackClick -> onBackClick()
-                else -> {}
+                ActiveRunAction.OnBackClick -> {
+                    if (!viewModel.state.hasStartedRunning) {
+                        onBackClick()
+                    }
+                }
+
+                else -> Unit
             }
+            viewModel.onAction(it)
         }
     )
 }

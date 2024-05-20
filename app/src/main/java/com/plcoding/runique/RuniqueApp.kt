@@ -6,6 +6,7 @@ import com.plcoding.auth.presentation.di.authViewModelModule
 import com.plcoding.core.data.di.coreDataModule
 import com.plcoding.core.database.di.databaseModule
 import com.plcoding.run.location.di.locationModule
+import com.plcoding.run.network.di.networkModule
 import com.plcoding.run.presentation.di.runPresentationModule
 import com.plcoding.runique.di.appModule
 import kotlinx.coroutines.CoroutineScope
@@ -28,13 +29,14 @@ class RuniqueApp : Application() {
             androidLogger()
             androidContext(this@RuniqueApp)
             modules(
-                appModule,
                 authDataModule,
                 authViewModelModule,
+                appModule,
                 coreDataModule,
                 runPresentationModule,
                 locationModule,
-                databaseModule
+                databaseModule,
+                networkModule,
             )
         }
     }

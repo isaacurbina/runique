@@ -12,10 +12,10 @@ import org.koin.dsl.module
 val databaseModule = module {
     single {
         Room.databaseBuilder(
-            context = androidApplication(),
-            klass = RunDatabase::class.java,
-            name = "run.db"
-        )
+            androidApplication(),
+            RunDatabase::class.java,
+            "run.db"
+        ).build()
     }
     single {
         get<RunDatabase>().runDao
