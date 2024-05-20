@@ -6,14 +6,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.plcoding.auth.presentation.asUiText
 import com.plcoding.core.domain.LocationDataCalculator
 import com.plcoding.core.domain.location.Location
 import com.plcoding.core.domain.run.Run
+import com.plcoding.core.domain.run.RunRepository
+import com.plcoding.core.domain.util.Result
 import com.plcoding.run.domain.RunningTracker
 import com.plcoding.run.presentation.activerun.service.ActiveRunService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -26,7 +28,8 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class ActiveRunViewModel(
-    private val runningTracker: RunningTracker
+    private val runningTracker: RunningTracker,
+    private val runRepository: RunRepository
 ) : ViewModel() {
 
     // region properties
@@ -165,10 +168,12 @@ class ActiveRunViewModel(
                 mapPictureUrl = null
             )
 
-            state = state.copy(isSavingRun = true)
-            delay(300L) // TODO(save run in repository)
-
             runningTracker.finishRun()
+
+            when (val result = runRepository.upsertRun(run, mapPicturesBytes)) {
+                is Result.Error -> eventChannel.send(ActiveRunEvent.Error(result.error.asUiText()))
+                is Result.Success -> eventChannel.send(ActiveRunEvent.RunSaved)
+            }
             state = state.copy(isSavingRun = false)
         }
     }
