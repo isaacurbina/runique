@@ -35,6 +35,6 @@ class CreateRunWorker(
     }
 
     companion object {
-        private const val RUN_ID = "RUN_ID"
+        internal const val RUN_ID = "RUN_ID"
     }
 }
