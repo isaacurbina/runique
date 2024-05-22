@@ -13,6 +13,7 @@ import com.plcoding.core.domain.util.DataError
 import com.plcoding.core.domain.util.EmptyResult
 import com.plcoding.core.domain.util.Result
 import com.plcoding.core.domain.util.asEmptyDataResult
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -26,7 +27,8 @@ class OfflineFirstRunRepository(
     private val runPendingSyncDao: RunPendingSyncDao,
     private val sessionStorage: SessionStorage,
     private val applicationScope: CoroutineScope,
-    private val syncRunScheduler: SyncRunScheduler
+    private val syncRunScheduler: SyncRunScheduler,
+    private val client: HttpClient
 ) : RunRepository {
 
     override fun getRuns(): Flow<List<Run>> {
@@ -137,5 +139,9 @@ class OfflineFirstRunRepository(
             createJobs.forEach { it.join() }
             deleteJob.forEach { it.join() }
         }
+    }
+
+    override suspend fun deleteAllRuns() {
+        localRunDataSource.deleteAllRuns()
     }
 }

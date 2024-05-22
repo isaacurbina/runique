@@ -9,8 +9,12 @@ import com.plcoding.core.domain.run.Run
 import com.plcoding.core.domain.util.DataError
 import com.plcoding.core.domain.util.EmptyResult
 import com.plcoding.core.domain.util.Result
+import com.plcoding.core.domain.util.asEmptyDataResult
 import com.plcoding.core.domain.util.map
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerAuthProvider
+import io.ktor.client.plugins.plugin
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.http.Headers
@@ -61,5 +65,16 @@ class KtorRemoteRunDataSource(
             route = "/run",
             queryParams = mapOf("id" to id)
         )
+    }
+
+    override suspend fun logout(): EmptyResult<DataError.Network> {
+        val result = httpClient.get<Unit>(
+            route = "/logout"
+        ).asEmptyDataResult()
+
+        httpClient.plugin(Auth).providers.filterIsInstance<BearerAuthProvider>()
+            .firstOrNull()
+            ?.clearToken()
+        return result
     }
 }
