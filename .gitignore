@@ -14,7 +14,7 @@
 .externalNativeBuild
 .cxx
 local.properties
-analytics/analytics_feature/build/*
+analytics/analyticsfeature/build/*
 analytics/data/build/*
 analytics/domain/build/*
 analytics/presentation/build/*
