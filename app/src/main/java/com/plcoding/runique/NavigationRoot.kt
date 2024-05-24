@@ -18,7 +18,8 @@ import com.plcoding.run.presentation.runoverview.RunOverviewScreenRoot
 @Composable
 fun NavigationRoot(
     navController: NavHostController,
-    isLoggedIn: Boolean
+    isLoggedIn: Boolean,
+    onAnalyticsClick: () -> Unit
 ) {
     val startDestination = if (isLoggedIn) {
         RunGraphDestination.RUN.name
@@ -28,7 +29,7 @@ fun NavigationRoot(
         startDestination = startDestination
     ) {
         authGraph(navController)
-        runGraph(navController)
+        runGraph(navController, onAnalyticsClick)
     }
 }
 
@@ -88,7 +89,10 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
     }
 }
 
-private fun NavGraphBuilder.runGraph(navController: NavHostController) {
+private fun NavGraphBuilder.runGraph(
+    navController: NavHostController,
+    onAnalyticsClick: () -> Unit
+) {
     navigation(
         startDestination = RunGraphDestination.RUN_OVERVIEW.name,
         route = RunGraphDestination.RUN.name
@@ -104,7 +108,8 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
                             inclusive = true
                         }
                     }
-                }
+                },
+                onAnalyticsClick = onAnalyticsClick
             )
         }
         composable(
