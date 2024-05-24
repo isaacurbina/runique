@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Runique</string>
     <string name="title_analytics_feature">Analytics</string>
+    <string name="couldnt_load_module">Couldn\'t load module</string>
+    <string name="analytics_feature_was_installed">Analytics module was installed successfully</string>
+    <string name="failed_to_install_analytics">Analytics module was not installed</string>
+    <string name="installing_analytics">Installing analytics module…</string>
+    <string name="downloading_analytics">Downloading in progress…</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="installation_pending">Installation of analytics module is pending</string>
+    <string name="cancelling_installation">Cancelling installation</string>
 </resources>
