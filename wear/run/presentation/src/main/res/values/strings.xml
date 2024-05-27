@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="connect_your_phone">This app requires the Runique phone app to be installed and connected</string>
+</resources>
