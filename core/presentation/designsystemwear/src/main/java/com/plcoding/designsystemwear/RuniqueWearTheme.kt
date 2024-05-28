@@ -1,4 +1,4 @@
-package com.iucoding.designsystemwear
+package com.plcoding.designsystemwear
 
 import androidx.compose.runtime.Composable
 import androidx.wear.compose.material3.ColorScheme

@@ -1,4 +1,4 @@
-package com.iucoding.designsystemwear
+package com.plcoding.designsystemwear
 
 import org.junit.Test
 
