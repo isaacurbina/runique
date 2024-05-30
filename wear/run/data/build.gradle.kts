@@ -14,4 +14,5 @@ dependencies {
     implementation(libs.bundles.koin)
     implementation(projects.core.domain)
     implementation(projects.wear.run.domain)
+    implementation(projects.core.connectivity.domain)
 }

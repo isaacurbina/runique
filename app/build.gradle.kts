@@ -82,4 +82,8 @@ dependencies {
     implementation(projects.run.location)
     implementation(projects.run.network)
     implementation(projects.run.presentation)
+
+    // werable connectivity
+    implementation(projects.core.connectivity.domain)
+    implementation(projects.core.connectivity.data)
 }

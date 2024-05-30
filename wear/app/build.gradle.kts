@@ -22,4 +22,8 @@ dependencies {
     implementation(projects.core.presentation.designsystemwear)
     implementation(projects.wear.run.presentation)
     implementation(projects.wear.run.data)
+
+    // phone connectivity
+    implementation(projects.core.connectivity.domain)
+    implementation(projects.core.connectivity.data)
 }
