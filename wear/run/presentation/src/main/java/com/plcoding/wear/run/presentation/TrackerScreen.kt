@@ -1,5 +1,9 @@
 package com.plcoding.wear.run.presentation
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,8 +17,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,6 +56,29 @@ private fun TrackerScreen(
     state: TrackerState,
     onAction: (TrackerAction) -> Unit
 ) {
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val hasBodySensorPermission = permissions[Manifest.permission.BODY_SENSORS] == true
+        onAction(TrackerAction.OnBodySensorPermissionResult(hasBodySensorPermission))
+    }
+    val context = LocalContext.current
+    LaunchedEffect(key1 = true) {
+        val hasBodySensorPermission = context.hasBodySensorsPermission()
+        onAction(TrackerAction.OnBodySensorPermissionResult(hasBodySensorPermission))
+        val hasNotificationPermission = context.hasNotificationPermission()
+
+        val permissions = mutableListOf<String>()
+        if (!hasBodySensorPermission) {
+            permissions.add(Manifest.permission.BODY_SENSORS)
+        }
+        if (!hasNotificationPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissions.add(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        if (permissions.isNotEmpty()) {
+            permissionLauncher.launch(permissions.toTypedArray())
+        }
+    }
     if (state.isConnectedPhoneNearby) {
         Column(
             modifier = Modifier
