@@ -2,6 +2,7 @@ package com.plcoding.wear.run.presentation
 
 import android.Manifest
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -31,6 +32,7 @@ import androidx.wear.compose.material3.IconButtonDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
+import com.plcoding.auth.presentation.ObserveAsEvents
 import com.plcoding.auth.presentation.formatted
 import com.plcoding.auth.presentation.toFormattedHeartRate
 import com.plcoding.auth.presentation.toFormattedKm
@@ -45,6 +47,19 @@ import org.koin.androidx.compose.koinViewModel
 fun TrackerScreenRoot(
     viewModel: TrackerViewModel = koinViewModel()
 ) {
+    val context = LocalContext.current
+    ObserveAsEvents(flow = viewModel.events) { event ->
+        when (event) {
+            is TrackerEvent.Error ->
+                Toast.makeText(
+                    context,
+                    event.message.asString(context),
+                    Toast.LENGTH_LONG
+                ).show()
+
+            TrackerEvent.RunFinished -> Unit
+        }
+    }
     TrackerScreen(
         state = viewModel.state,
         onAction = viewModel::onAction
