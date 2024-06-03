@@ -2,7 +2,6 @@
 
 package com.plcoding.run.presentation.runoverview.component
 
-import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -248,6 +247,14 @@ private fun DataGrid(
         RunDataUi(
             name = stringResource(id = R.string.total_elevation),
             value = run.totalElevation
+        ),
+        RunDataUi(
+            name = stringResource(id = R.string.avg_heart_rate),
+            value = run.avgHeartRate
+        ),
+        RunDataUi(
+            name = stringResource(id = R.string.max_heart_rate),
+            value = run.maxHeartRate
         )
     )
     var maxWidth by remember {
@@ -297,22 +304,20 @@ private fun DataGridCell(
 @Composable
 private fun RunListItemPreview() {
     RuniqueTheme {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            RunListItem(
-                runUi = Run(
-                    id = "123",
-                    duration = 10.minutes + 30.seconds,
-                    dateTimeUtc = ZonedDateTime.now(),
-                    distanceMeters = 2543,
-                    location = Location(0.0, 0.0),
-                    maxSpeedKmh = 15.6234,
-                    totalElevationMeters = 123,
-                    mapPictureUrl = null
-                ).toRunUi(),
-                onDeleteClick = { /*TODO*/ }
-            )
-        } else {
-            // TODO(Research how to do this in Android 0<
-        }
+        RunListItem(
+            runUi = Run(
+                id = "123",
+                duration = 10.minutes + 30.seconds,
+                dateTimeUtc = ZonedDateTime.now(),
+                distanceMeters = 2543,
+                location = Location(0.0, 0.0),
+                maxSpeedKmh = 15.6234,
+                totalElevationMeters = 123,
+                mapPictureUrl = null,
+                maxHeartRate = 150,
+                avgHeartRate = 120
+            ).toRunUi(),
+            onDeleteClick = { /*TODO*/ }
+        )
     }
 }

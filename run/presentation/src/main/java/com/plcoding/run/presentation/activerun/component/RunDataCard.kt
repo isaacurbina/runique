@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.plcoding.auth.presentation.formatted
+import com.plcoding.auth.presentation.toFormattedHeartRate
 import com.plcoding.auth.presentation.toFormattedKm
 import com.plcoding.auth.presentation.toFormattedPace
 import com.plcoding.core.presentation.designsystem.RuniqueTheme
@@ -58,6 +59,11 @@ fun RunDataCard(
             RunDataItem(
                 title = stringResource(id = R.string.distance),
                 value = (runData.distanceMeters / 1000.0).toFormattedKm(),
+                modifier = Modifier.defaultMinSize(minWidth = 75.dp)
+            )
+            RunDataItem(
+                title = stringResource(id = R.string.heart_rate),
+                value = runData.heartRates.lastOrNull()?.toFormattedHeartRate() ?: "-",
                 modifier = Modifier.defaultMinSize(minWidth = 75.dp)
             )
             RunDataItem(
@@ -101,7 +107,8 @@ private fun RunDataCardPreview() {
             elapsedTime = 10.minutes,
             runData = RunData(
                 distanceMeters = 123,
-                pace = 3.minutes
+                pace = 3.minutes,
+                heartRates = listOf(150),
             )
         )
     }
