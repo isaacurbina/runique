@@ -1,7 +1,7 @@
 package com.plcoding.run.presentation.runoverview.mapper
 
-import android.os.Build
 import com.plcoding.auth.presentation.formatted
+import com.plcoding.auth.presentation.toFormattedHeartRate
 import com.plcoding.auth.presentation.toFormattedKm
 import com.plcoding.auth.presentation.toFormattedKmh
 import com.plcoding.auth.presentation.toFormattedMeters
@@ -29,6 +29,8 @@ fun Run.toRunUi(): RunUi {
         maxSpeed = maxSpeedKmh.toFormattedKmh(),
         pace = duration.toFormattedPace(distanceKm),
         totalElevation = totalElevationMeters.toFormattedMeters(),
-        mapPictureUrl = mapPictureUrl
+        mapPictureUrl = mapPictureUrl,
+        avgHeartRate = avgHeartRate?.toFormattedHeartRate() ?: "-",
+        maxHeartRate = maxHeartRate?.toFormattedHeartRate() ?: "-"
     )
 }

@@ -2,6 +2,7 @@
 
 package com.plcoding.run.domain
 
+import com.plcoding.core.connectivity.domain.messaging.MessagingAction
 import com.plcoding.core.domain.LocationDataCalculator
 import com.plcoding.core.domain.RuniqueTimer
 import com.plcoding.core.domain.location.LocationTimestamp
@@ -11,12 +12,17 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.zip
@@ -26,7 +32,8 @@ import kotlin.time.Duration.Companion.seconds
 
 class RunningTracker(
     private val locationObserver: LocationObserver,
-    applicationScope: CoroutineScope
+    applicationScope: CoroutineScope,
+    private val watchConnector: WatchConnector
 ) {
     private val _runData = MutableStateFlow(RunData())
     val runData = _runData.asStateFlow()
@@ -48,6 +55,25 @@ class RunningTracker(
             scope = CoroutineScope(Dispatchers.Main),
             started = SharingStarted.Lazily,
             initialValue = null
+        )
+
+    private val heartRates = isTracking
+        .flatMapLatest {
+            if (it) {
+                watchConnector.messagingActions
+            } else emptyFlow()
+        }
+        .filterIsInstance<MessagingAction.HeartRateUpdate>()
+        .map {
+            it.heartRate
+        }
+        .runningFold(initial = emptyList<Int>()) { currentHeartRates, newHeartRate ->
+            currentHeartRates + newHeartRate
+        }
+        .stateIn(
+            scope = applicationScope,
+            started = SharingStarted.Lazily,
+            initialValue = emptyList()
         )
 
     init {
@@ -83,7 +109,7 @@ class RunningTracker(
                     location = location,
                     durationTimestamp = elapsedTime
                 )
-            }.onEach { location ->
+            }.combine(heartRates) { location, heartRates ->
                 _runData.update {
                     val currentLocations = runData.value.locations
                     val lastLocationsList = if (currentLocations.isNotEmpty()) {
@@ -103,17 +129,34 @@ class RunningTracker(
                     RunData(
                         distanceMeters = distanceMeters,
                         pace = avgSecondsPerKm.seconds,
-                        locations = newLocationsList
+                        locations = newLocationsList,
+                        heartRates = heartRates
                     )
                 }
             }.launchIn(applicationScope)
+
+        elapsedTime
+            .onEach {
+                watchConnector.sendActionToWatch(MessagingAction.TimeUpdate(it))
+            }
+            .launchIn(applicationScope)
+
+        runData
+            .map { it.distanceMeters }
+            .distinctUntilChanged()
+            .onEach {
+                watchConnector.sendActionToWatch(MessagingAction.DistanceUpdate(it))
+            }
+            .launchIn(applicationScope)
     }
 
     fun startObservingLocation() {
         isObservingLocation.value = true
+        watchConnector.setIsTrackable(true)
     }
 
     fun stopObservingLocation() {
+        watchConnector.setIsTrackable(false)
         isObservingLocation.value = false
     }
 

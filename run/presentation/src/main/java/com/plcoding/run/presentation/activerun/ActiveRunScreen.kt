@@ -37,7 +37,7 @@ import com.plcoding.run.presentation.R
 import com.plcoding.run.presentation.activerun.component.RunDataCard
 import com.plcoding.run.presentation.activerun.map.TrackerMap
 import com.plcoding.run.presentation.activerun.service.ActiveRunService
-import com.plcoding.run.presentation.util.hasLocationPermission
+import com.plcoding.run.presentation.util.hasLocationPermissions
 import com.plcoding.run.presentation.util.hasNotificationPermission
 import com.plcoding.run.presentation.util.requestRuniquePermissions
 import com.plcoding.run.presentation.util.shouldShowLocationPermissionRationale
@@ -124,7 +124,7 @@ fun ActiveRunScreen(
 
         onAction(
             ActiveRunAction.SubmitLocationPermissionInfo(
-                acceptedLocationPermission = context.hasLocationPermission(),
+                acceptedLocationPermission = context.hasLocationPermissions(),
                 showLocationRationale = showLocationRationale
             )
         )
@@ -148,7 +148,7 @@ fun ActiveRunScreen(
     }
 
     LaunchedEffect(key1 = state.shouldTrack) {
-        if (context.hasLocationPermission() && state.shouldTrack && !ActiveRunService.isServiceActive) {
+        if (context.hasLocationPermissions() && state.shouldTrack && !ActiveRunService.isServiceActive) {
             onServiceToggle(ActiveRunService.State.STARTED)
         }
     }

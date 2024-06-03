@@ -24,7 +24,7 @@ private fun Context.hasPermission(permission: String): Boolean {
     ) == PackageManager.PERMISSION_GRANTED
 }
 
-fun Context.hasLocationPermission(): Boolean {
+fun Context.hasLocationPermissions(): Boolean {
     return hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
 }
 
@@ -37,7 +37,7 @@ fun Context.hasNotificationPermission(): Boolean {
 fun ActivityResultLauncher<Array<String>>.requestRuniquePermissions(
     context: Context
 ) {
-    val hasLocationPermission = context.hasLocationPermission()
+    val hasLocationPermission = context.hasLocationPermissions()
     val hasNotificationPermission = context.hasNotificationPermission()
 
     val locationPermission = arrayOf(
