@@ -1,6 +1,5 @@
 package com.plcoding.run.presentation.di
 
-
 import com.plcoding.run.domain.RunningTracker
 import com.plcoding.run.presentation.activerun.ActiveRunViewModel
 import com.plcoding.run.presentation.runoverview.RunOverviewViewModel
@@ -12,4 +11,7 @@ val runPresentationModule = module {
     singleOf(::RunningTracker)
     viewModelOf(::RunOverviewViewModel)
     viewModelOf(::ActiveRunViewModel)
+    single {
+        get<RunningTracker>().elapsedTime
+    }
 }

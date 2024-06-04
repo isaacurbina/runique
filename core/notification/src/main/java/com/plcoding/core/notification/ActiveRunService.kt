@@ -1,4 +1,4 @@
-package com.plcoding.run.presentation.activerun.service
+package com.plcoding.core.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -6,26 +6,26 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
 import com.plcoding.auth.presentation.formatted
-import com.plcoding.run.domain.RunningTracker
-import com.plcoding.run.presentation.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
+import kotlin.time.Duration
 
 class ActiveRunService : Service() {
 
-    private val runningTracker by inject<RunningTracker>()
+    private val elapsedTime by inject<StateFlow<Duration>>()
 
     private var serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
@@ -59,11 +59,9 @@ class ActiveRunService : Service() {
     }
 
     private fun start(activityClass: Class<*>) {
-        if (!isServiceActive) {
-            isServiceActive = true
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                createNotificationChannel()
-            }
+        if (!isServiceActive.value) {
+            _isServiceActive.value = true
+            createNotificationChannel()
 
             val activityIntent = Intent(applicationContext, activityClass).apply {
                 data = "runique://active_run".toUri()
@@ -84,13 +82,12 @@ class ActiveRunService : Service() {
     }
 
     fun stop() {
-        isServiceActive = false
+        _isServiceActive.value = false
         serviceScope.cancel()
         serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
         stopSelf()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID,
@@ -101,7 +98,7 @@ class ActiveRunService : Service() {
     }
 
     private fun updateNotification() {
-        runningTracker.elapsedTime.onEach {
+        elapsedTime.onEach {
             val notification = baseNotification
                 .setContentText(it.formatted())
                 .build()
@@ -110,13 +107,13 @@ class ActiveRunService : Service() {
     }
 
     companion object {
-        var isServiceActive = false
         private const val CHANNEL_ID = "active_run"
-
         private const val ACTION_START = "ACTION_START"
         private const val ACTION_STOP = "ACTION_STOP"
-
         private const val EXTRA_ACTIVITY_CLASS = "EXTRA_ACTIVITY_CLASS"
+
+        private val _isServiceActive = MutableStateFlow(false)
+        val isServiceActive = _isServiceActive.asStateFlow()
 
         fun createStartIntent(context: Context, activityClass: Class<*>): Intent {
             return Intent(context, ActiveRunService::class.java).apply {
