@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plcoding.core.connectivity.domain.messaging.MessagingAction
 import com.plcoding.core.domain.util.Result
+import com.plcoding.core.notification.ActiveRunService
 import com.plcoding.wear.run.domain.ExerciseTracker
 import com.plcoding.wear.run.domain.PhoneConnector
 import com.plcoding.wear.run.domain.RunningWearTracker
@@ -29,7 +30,13 @@ class TrackerViewModel(
     private val runningTracker: RunningWearTracker
 ) : ViewModel() {
 
-    var state by mutableStateOf(TrackerState())
+    var state by mutableStateOf(
+        TrackerState(
+            hasStartedRunning = ActiveRunService.isServiceActive.value,
+            isRunActive = ActiveRunService.isServiceActive.value && runningTracker.isTracking.value,
+            isTrackable = ActiveRunService.isServiceActive.value
+        )
+    )
         private set
 
     private val hasBodySensorPermission = MutableStateFlow(false)
@@ -148,6 +155,7 @@ class TrackerViewModel(
                     )
                 }
             }
+
             is TrackerAction.OnBodySensorPermissionResult -> {
                 hasBodySensorPermission.value = action.isGranted
                 if (action.isGranted) {

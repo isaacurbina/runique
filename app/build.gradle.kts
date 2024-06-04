@@ -75,6 +75,7 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.presentation.designsystem)
     implementation(projects.core.presentation.ui)
+    implementation(projects.core.notification)
 
     // run modules
     implementation(projects.run.data)

@@ -13,9 +13,9 @@ import com.plcoding.core.domain.location.Location
 import com.plcoding.core.domain.run.Run
 import com.plcoding.core.domain.run.RunRepository
 import com.plcoding.core.domain.util.Result
+import com.plcoding.core.notification.ActiveRunService
 import com.plcoding.run.domain.RunningTracker
 import com.plcoding.run.domain.WatchConnector
-import com.plcoding.run.presentation.activerun.service.ActiveRunService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -43,7 +43,7 @@ class ActiveRunViewModel(
     // region properties
     var state by mutableStateOf(
         ActiveRunState(
-            shouldTrack = ActiveRunService.isServiceActive && runningTracker.isTracking.value
+            shouldTrack = ActiveRunService.isServiceActive.value && runningTracker.isTracking.value
         )
     )
         private set
@@ -178,7 +178,7 @@ class ActiveRunViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        if (!ActiveRunService.isServiceActive) {
+        if (!ActiveRunService.isServiceActive.value) {
             applicationScope.launch {
                 watchConnector.sendActionToWatch(MessagingAction.Untraceable)
             }
