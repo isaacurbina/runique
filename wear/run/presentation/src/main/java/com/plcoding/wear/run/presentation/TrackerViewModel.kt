@@ -1,3 +1,5 @@
+@file:OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+
 package com.plcoding.wear.run.presentation
 
 import androidx.compose.runtime.getValue
@@ -12,17 +14,22 @@ import com.plcoding.core.notification.ActiveRunService
 import com.plcoding.wear.run.domain.ExerciseTracker
 import com.plcoding.wear.run.domain.PhoneConnector
 import com.plcoding.wear.run.domain.RunningWearTracker
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class TrackerViewModel(
     private val exerciseTracker: ExerciseTracker,
@@ -105,6 +112,34 @@ class TrackerViewModel(
 
         verifyHeartRateTracking()
 
+        val isAmbientMode = snapshotFlow { state.isAmbientMode }
+
+        isAmbientMode
+            .flatMapLatest {
+                if (it) {
+                    runningTracker
+                        .heartRate
+                        .sample(10.seconds)
+                } else runningTracker.heartRate
+            }
+            .onEach {
+                state = state.copy(heartRate = it)
+            }
+            .launchIn(viewModelScope)
+
+        isAmbientMode
+            .flatMapLatest {
+                if (it) {
+                    runningTracker
+                        .elapsedTime
+                        .sample(10.seconds)
+                } else runningTracker.elapsedTime
+            }
+            .onEach {
+                state = state.copy(elapsedDuration = it)
+            }
+            .launchIn(viewModelScope)
+
         runningTracker
             .heartRate
             .onEach {
@@ -162,6 +197,19 @@ class TrackerViewModel(
                     verifyHeartRateTracking()
                 }
             }
+
+            is TrackerAction.OnEnterAmbientMode -> {
+                state = state.copy(
+                    isAmbientMode = true,
+                    burnInProtectionRequired = action.burnInProtectionRequired
+                )
+            }
+
+            TrackerAction.OnExitAmbientMode -> {
+                state = state.copy(
+                    isAmbientMode = false
+                )
+            }
         }
     }
 
@@ -173,12 +221,13 @@ class TrackerViewModel(
 
     private fun sendActionToPhone(action: TrackerAction) = viewModelScope.launch {
         val messagingAction = when (action) {
-            is TrackerAction.OnBodySensorPermissionResult -> null
             TrackerAction.OnFinishRunClick -> MessagingAction.Finish
             TrackerAction.OnToggleRunClick ->
                 if (state.isRunActive) {
                     MessagingAction.Pause
                 } else MessagingAction.StartOrResume
+
+            else -> null
         }
         messagingAction?.let {
             val result = phoneConnector.sendActionToPhone(it)

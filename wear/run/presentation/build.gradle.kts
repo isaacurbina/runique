@@ -30,4 +30,6 @@ dependencies {
     implementation(projects.core.connectivity.domain)
     implementation(projects.core.notification)
     implementation(projects.wear.run.domain)
+
+    implementation(libs.androidx.wear)
 }
