@@ -42,6 +42,8 @@ import com.plcoding.core.notification.ActiveRunService
 import com.plcoding.core.presentation.designsystem.ExclamationMarkIcon
 import com.plcoding.core.presentation.designsystem.FinishIcon
 import com.plcoding.designsystemwear.RuniqueWearTheme
+import com.plcoding.wear.run.presentation.ambient.AmbientObserver
+import com.plcoding.wear.run.presentation.ambient.ambientMode
 import com.plcoding.wear.run.presentation.component.RunDataCard
 import com.plcoding.wear.run.presentation.component.ToggleRunButton
 import org.koin.androidx.compose.koinViewModel
@@ -110,11 +112,22 @@ private fun TrackerScreen(
             permissionLauncher.launch(permissions.toTypedArray())
         }
     }
+
+    AmbientObserver(
+        onEnterAmbient = {
+            onAction(TrackerAction.OnEnterAmbientMode(it.burnInProtectionRequired))
+        },
+        onExitAmbient = {
+            onAction(TrackerAction.OnExitAmbientMode)
+        }
+    )
+
     if (state.isConnectedPhoneNearby) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
+                .background(MaterialTheme.colorScheme.background)
+                .ambientMode(state.isAmbientMode, state.burnInProtectionRequired),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
