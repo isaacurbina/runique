@@ -16,9 +16,12 @@ class AndroidJUnit5ConventionPlugin : Plugin<Project> {
                 "debugImplementation"(libs.findLibrary("androidx.compose.ui.test.manifest").get())
                 "androidTestRuntimeOnly"(libs.findLibrary("junit5.engine").get())
 
-                "testImplementation"(libs.findLibrary("assertk").get())
-                "testImplementation"(libs.findLibrary("coroutines.test").get())
-                "testImplementation"(libs.findLibrary("turbine").get())
+                "androidTestImplementation"(libs.findLibrary("assertk").get())
+                "androidTestImplementation"(libs.findLibrary("coroutines.test").get())
+                "androidTestImplementation"(libs.findLibrary("turbine").get())
+                "androidTestImplementation"(libs.findBundle("ktor").get())
+                "androidTestImplementation"(libs.findLibrary("ktor.client.mock").get())
+                "androidTestImplementation"(project(":core:android-test"))
             }
         }
     }

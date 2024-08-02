@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.runique.android.application.compose)
     alias(libs.plugins.runique.jvm.ktor)
+    alias(libs.plugins.runique.android.junit5)
 }
 
 android {
@@ -84,7 +85,7 @@ dependencies {
     implementation(projects.run.network)
     implementation(projects.run.presentation)
 
-    // werable connectivity
+    // wearable connectivity
     implementation(projects.core.connectivity.domain)
     implementation(projects.core.connectivity.data)
 }
